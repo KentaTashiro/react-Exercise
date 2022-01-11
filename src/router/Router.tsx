@@ -1,8 +1,10 @@
 import { memo, VFC } from "react";
 import { Route, Switch } from "react-router-dom";
+
 import { Login } from "../components/pages/Login";
 import { Page404 } from "../components/pages/Page404";
 import { homeRoutes } from "../router/HomeRoutes";
+import { HeaderLayout } from "../components/templates/HeaderLayout";
 
 export const Router: VFC = memo(() => {
   return (
@@ -15,8 +17,12 @@ export const Router: VFC = memo(() => {
         render={({ match: { url } }) => (
           <Switch>
             {homeRoutes.map((route) => (
-              <Route exact={route.exact} path={`${url}${route.path}`}>
-                {route.children}
+              <Route
+                key={route.path}
+                exact={route.exact}
+                path={`${url}${route.path}`}
+              >
+                <HeaderLayout>{route.children}</HeaderLayout>
               </Route>
             ))}
           </Switch>
