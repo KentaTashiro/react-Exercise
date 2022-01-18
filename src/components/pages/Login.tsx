@@ -1,12 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Input,
-  Spinner,
-  Stack
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, Input, Stack } from "@chakra-ui/react";
 import { ChangeEvent, memo, useState, VFC } from "react";
 
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
@@ -38,7 +30,7 @@ export const Login: VFC = memo(() => {
           />
           <PrimaryButton
             text="ログイン"
-            onClickLogin={onClickLogin}
+            onClick={onClickLogin}
             loading={loading}
             disabled={userId === "" || loading}
           />

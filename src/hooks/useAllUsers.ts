@@ -26,5 +26,5 @@ export const useAllUsers = () => {
       })
       .finally(() => setLoading(false));
   }, []);
-  return { getUsers, users, loading };
+  return { getUsers, users, setUsers, loading };
 };

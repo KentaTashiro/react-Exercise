@@ -5,14 +5,15 @@ import { memo, useCallback, useEffect, useState, VFC } from "react";
 import { UserCard } from "../organisms/user/UserCard";
 import { useAllUsers } from "../../hooks/useAllUsers";
 import { useSelectUser } from "../../hooks/useSelectUser";
+import { useLoginUser } from "../../hooks/useLoginUser";
 import { UserDetailModal } from "../organisms/user/UserDetailModal";
-import { User } from "../../types/api/user";
+import { useUpdateUsers } from "../../hooks/useUpdateUsers";
 
 export const UserManagement: VFC = memo(() => {
   const { getUsers, users, loading } = useAllUsers();
   const { onSelectUser, selectUser } = useSelectUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(selectUser);
+  const { loginUser } = useLoginUser();
 
   const onClickUser = useCallback(
     (id: number) => {
@@ -47,6 +48,7 @@ export const UserManagement: VFC = memo(() => {
             isOpen={isOpen}
             onClose={onClose}
             user={selectUser}
+            isAdmin={loginUser.isAdmin}
           />
         </>
       )}

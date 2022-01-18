@@ -4,10 +4,12 @@ import { useHistory } from "react-router-dom";
 
 import { User } from "../types/api/user";
 import { useMessage } from "./useMessage";
+import { useLoginUser } from "./useLoginUser";
 
 export const useAuth = () => {
   const history = useHistory();
   const { showMessage } = useMessage();
+  const { setLoginUser } = useLoginUser();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -18,6 +20,9 @@ export const useAuth = () => {
         .get<User>(`https://jsonplaceholder.typicode.com/users/${id}`)
         .then((res) => {
           if (res.data) {
+            const isAdmin: boolean = res.data.id === 10;
+            setLoginUser({ ...res.data, isAdmin });
+            setLoading(false);
             showMessage({ title: "ログインしました", status: "success" });
             history.push("/home");
           } else {
@@ -25,6 +30,7 @@ export const useAuth = () => {
               title: "入力されたユーザーIDは登録されていません",
               status: "error"
             });
+            setLoading(false);
           }
         })
         .catch((e) => {
@@ -32,10 +38,10 @@ export const useAuth = () => {
             title: "何らかのエラーによりログインできません",
             status: "error"
           });
-        })
-        .finally(() => setLoading(false));
+          setLoading(false);
+        });
     },
-    [history]
+    [history, showMessage, setLoginUser]
   );
   return { login, loading };
 };
