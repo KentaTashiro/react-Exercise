@@ -64,7 +64,6 @@ export const UserDetailModal: VFC<Props> = memo((props) => {
     updateUsers();
     onClose();
   };
-  console.log(isOpen);
   return (
     <Modal
       isOpen={isOpen}
