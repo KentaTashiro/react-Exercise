@@ -10,7 +10,7 @@ import { UserDetailModal } from "../organisms/user/UserDetailModal";
 import { useUpdateUsers } from "../../hooks/useUpdateUsers";
 
 export const UserManagement: VFC = memo(() => {
-  const { getUsers, users, loading } = useAllUsers();
+  const { getUsers, users, loading, setUsers } = useAllUsers();
   const { onSelectUser, selectUser } = useSelectUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { loginUser } = useLoginUser();

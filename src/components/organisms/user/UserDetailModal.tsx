@@ -1,4 +1,4 @@
-import { memo, useEffect, VFC } from "react";
+import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -9,59 +9,49 @@ import {
   Stack,
   Input,
   FormControl,
-  FormLabel
+  FormLabel,
+  ModalFooter
 } from "@chakra-ui/react";
 
-import { USer } from "../../../types/api/user";
+import { User } from "../../../types/api/user";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
-import { useUpdateUsers } from "../../../hooks/useUpdateUsers";
 
 type Props = {
+  user: User;
   isOpen: boolean;
+  isAdmin?: boolean;
   onClose: () => void;
-  user: USer;
-  isAdmin: boolean;
 };
 
 export const UserDetailModal: VFC<Props> = memo((props) => {
-  const { isOpen, onClose, user, isAdmin } = props;
+  const { isOpen, onClose, user, isAdmin = false } = props;
 
-  const {
-    setUpdId,
-    setUpdName,
-    updName,
-    setUpdFullName,
-    updFullName,
-    setUpdMail,
-    updMail,
-    setUpdPhone,
-    updPhone,
-    updateUsers
-  } = useUpdateUsers();
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   useEffect(() => {
-    setUpdId(user?.id);
-    setUpdName(user?.username);
-    setUpdFullName(user?.name);
-    setUpdMail(user?.email);
-    setUpdPhone(user?.phone);
+    setUsername(user?.username ?? "");
+    setName(user?.name ?? "");
+    setEmail(user?.email ?? "");
+    setPhone(user?.phone ?? "");
   }, [user]);
 
-  const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdName(event.target.value);
+  const onChangeUsername = (event: ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
   };
-  const onChangeFullName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdFullName(event.target.value);
+  const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
   };
-  const onChangeMail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdMail(event.target.value);
+  const onChangeMail = (event: ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
   };
-  const onChangePhone = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdPhone(event.target.value);
+  const onChangePhone = (event: ChangeEvent<HTMLInputElement>) => {
+    setPhone(event.target.value);
   };
 
   const onClickUpdate = () => {
-    updateUsers();
     onClose();
   };
   return (
@@ -72,7 +62,7 @@ export const UserDetailModal: VFC<Props> = memo((props) => {
       motionPreset="slideInBottom"
     >
       <ModalOverlay />
-      <ModalContent pb={6}>
+      <ModalContent pb={4}>
         <ModalHeader>ユーザー詳細</ModalHeader>
         <ModalCloseButton />
         <ModalBody mx={4}>
@@ -80,35 +70,37 @@ export const UserDetailModal: VFC<Props> = memo((props) => {
             <FormControl>
               <FormLabel>名前</FormLabel>
               <Input
-                value={updName}
+                value={username}
                 isReadOnly={!isAdmin}
-                onChange={onChangeName}
+                onChange={onChangeUsername}
               ></Input>
 
               <FormLabel>フルネーム</FormLabel>
               <Input
-                value={updFullName}
+                value={name}
                 isReadOnly={!isAdmin}
-                onChange={onChangeFullName}
+                onChange={onChangeName}
               ></Input>
 
               <FormLabel>MAIL</FormLabel>
               <Input
-                value={updMail}
+                value={email}
                 isReadOnly={!isAdmin}
                 onChange={onChangeMail}
               ></Input>
 
               <FormLabel>TEL</FormLabel>
               <Input
-                value={updPhone}
+                value={phone}
                 isReadOnly={!isAdmin}
                 onChange={onChangePhone}
               ></Input>
             </FormControl>
-            {isAdmin && <PrimaryButton text="更新" onClick={onClickUpdate} />}
           </Stack>
         </ModalBody>
+        <ModalFooter>
+          {isAdmin && <PrimaryButton text="更新" onClick={onClickUpdate} />}
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
